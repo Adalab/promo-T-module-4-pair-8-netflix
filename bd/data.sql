@@ -36,3 +36,15 @@ CREATE TABLE actors (
 INSERT INTO `netflix`.`actors` (`name`, `lastname`, `country`, `year_birthday`) VALUES ('Tom', 'Hanks', 'Estados Unidos', '1956');
 INSERT INTO `netflix`.`actors` (`name`, `lastname`, `country`, `year_birthday`) VALUES ('Roberto', 'Benigni', 'Italia', '1952');
 INSERT INTO `netflix`.`actors` (`name`, `lastname`, `country`, `year_birthday`) VALUES ('John', 'Travolta', 'Estados Unidos', '1954');
+--consultas--
+SELECT * FROM netflix.movies;
+SELECT title, genre FROM netflix.movies WHERE  year > 1990;
+SELECT * FROM netflix.movies WHERE category = 'Top 10';
+UPDATE netflix.movies SET year = 1997 WHERE id=2; 
+SELECT * FROM netflix.actors;
+SELECT * FROM netflix.actors WHERE year_birthday BETWEEN 1950 and 1960;
+SELECT name, lastname FROM netflix.actors WHERE country = 'Estados Unidos';
+select * from netflix.actors; 
+ALTER TABLE netflix.actors ADD photo varchar(100) AFTER lastname;
+
+--DROP TABLE nombre_tabla // DROP DATABASE nombre_del_database o DROP SCHEMA nombre_del_schema--
