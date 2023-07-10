@@ -48,3 +48,27 @@ select * from netflix.actors;
 ALTER TABLE netflix.actors ADD photo varchar(100) AFTER lastname;
 
 --DROP TABLE nombre_tabla // DROP DATABASE nombre_del_database o DROP SCHEMA nombre_del_schema--
+
+CREATE TABLE rel_movies_users
+(id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+fk_idUser INT,
+fk_idMovie INT, 
+FOREIGN KEY (fk_idUser) REFERENCES netflix.users(idUser),
+FOREIGN KEY (fk_idMovie) REFERENCES netflix.movies(id));
+
+INSERT INTO `netflix`.`rel_movies_users` (`fk_idUser`, `fk_idMovie`) VALUES ('1', '1');
+INSERT INTO `netflix`.`rel_movies_users` (`fk_idUser`, `fk_idMovie`) VALUES ('1', '2');
+INSERT INTO `netflix`.`rel_movies_users` (`fk_idUser`, `fk_idMovie`) VALUES ('2', '2');
+
+ALTER TABLE netflix.rel_movies_users ADD score INT AFTER fk_idMovie;
+
+CREATE TABLE rel_movies_actors
+(id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+fk_idActor INT,
+fk_idMovie INT, 
+FOREIGN KEY (fk_idActor) REFERENCES netflix.actors(idActor),
+FOREIGN KEY (fk_idMovie) REFERENCES netflix.movies(id));
+
+INSERT INTO `netflix`.`rel_movies_actors` (`fk_idActor`, `fk_idMovie`) VALUES ('1', '3');
+INSERT INTO `netflix`.`rel_movies_actors` (`fk_idActor`, `fk_idMovie`) VALUES ('2', '2');
+INSERT INTO `netflix`.`rel_movies_actors` (`fk_idActor`, `fk_idMovie`) VALUES ('3', '1');
