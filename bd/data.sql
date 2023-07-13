@@ -72,3 +72,11 @@ FOREIGN KEY (fk_idMovie) REFERENCES netflix.movies(id));
 INSERT INTO `netflix`.`rel_movies_actors` (`fk_idActor`, `fk_idMovie`) VALUES ('1', '3');
 INSERT INTO `netflix`.`rel_movies_actors` (`fk_idActor`, `fk_idMovie`) VALUES ('2', '2');
 INSERT INTO `netflix`.`rel_movies_actors` (`fk_idActor`, `fk_idMovie`) VALUES ('3', '1');
+
+-- UPDATE IMG QUE NO SE VEN
+
+
+
+UPDATE `netflix`.`movies` SET `image` = 'https://cdn.hobbyconsolas.com/sites/navi.axelspringer.es/public/media/image/2016/12/pulp-fiction.jpg' WHERE (`id` = '1');
+UPDATE `netflix`.`movies` SET `image` = 'https://upload.wikimedia.org/wikipedia/en/7/7c/Vitaebella.jpg' WHERE (`id` = '2');
+UPDATE `netflix`.`movies` SET `image` = 'https://c8.alamy.com/compes/pxnb1j/forrest-gump-poster-de-pelicula-original-pxnb1j.jpg' WHERE (`id` = '3');
