@@ -17,7 +17,7 @@ async function getConnection() {
   const connection = await mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'LieT0M3*',
+    password: 'Dev23.*',
     database: 'netflix',
   });
   connection.connect();
