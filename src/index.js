@@ -26,12 +26,28 @@ async function getConnection() {
 
 // endpoints
 server.get('/movies', async (req, res) => {
-  const selectMovies = "SELECT * FROM movies";
-  const conn = await getConnection();
-  const [results, cols] = await conn.query(selectMovies);
-  conn.end();
-  res.json({ success: true, movies: results });
+  const genreFilterParam = req.query.genre;
+  const sortFilterParam = req.query.sort;
+  console.log(req.query);
+  if (genreFilterParam) {
+    const selectMovies = 'SELECT * FROM movies WHERE genre=? ORDER BY id ?';
+    const conn = await getConnection();
+    const [results, cols] = await conn.query(selectMovies, [genreFilterParam, sortFilterParam]);
+    console.log('results ' + results);
+    conn.end();
+    res.json({ success: true, movies: results });
+  } else {
+    const selectMovies = 'SELECT * FROM movies';
+    const conn = await getConnection();
+    const [results, cols] = await conn.query(selectMovies);
+    console.log('results ' + results);
+    conn.end();
+    res.json({ success: true, movies: results });
+  }
+
+
 });
 
 // static
 server.use(express.static('./src/public-react'));
+server.use(express.static('./src/public-movies-images'));
