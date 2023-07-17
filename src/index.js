@@ -30,9 +30,9 @@ server.get('/movies', async (req, res) => {
   const sortFilterParam = req.query.sort;
   console.log(req.query);
   if (genreFilterParam) {
-    const selectMovies = 'SELECT * FROM movies WHERE genre=? ORDER BY id ?';
+    const selectMovies = `SELECT * FROM movies WHERE genre=? ORDER BY id ${sortFilterParam}`;
     const conn = await getConnection();
-    const [results, cols] = await conn.query(selectMovies, [genreFilterParam, sortFilterParam]);
+    const [results, cols] = await conn.query(selectMovies, [genreFilterParam]);
     console.log('results ' + results);
     conn.end();
     res.json({ success: true, movies: results });
