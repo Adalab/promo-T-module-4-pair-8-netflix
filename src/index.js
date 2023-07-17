@@ -29,15 +29,16 @@ server.get('/movies', async (req, res) => {
   const genreFilterParam = req.query.genre;
   const sortFilterParam = req.query.sort;
   console.log(req.query);
-  if (genreFilterParam) {
-    const selectMovies = `SELECT * FROM movies WHERE genre=? ORDER BY id ${sortFilterParam}`;
+  if (genreFilterParam && genreFilterParam !== '') {
+    const selectMovies = `SELECT * FROM movies WHERE genre=? ORDER BY title ${sortFilterParam}`;
     const conn = await getConnection();
     const [results, cols] = await conn.query(selectMovies, [genreFilterParam]);
     console.log('results ' + results);
     conn.end();
     res.json({ success: true, movies: results });
   } else {
-    const selectMovies = 'SELECT * FROM movies';
+    const selectMovies =
+    `SELECT * FROM movies ORDER BY title ${sortFilterParam}`;
     const conn = await getConnection();
     const [results, cols] = await conn.query(selectMovies);
     console.log('results ' + results);
