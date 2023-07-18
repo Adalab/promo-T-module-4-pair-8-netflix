@@ -80,3 +80,10 @@ INSERT INTO `netflix`.`rel_movies_actors` (`fk_idActor`, `fk_idMovie`) VALUES ('
 UPDATE `netflix`.`movies` SET `image` = 'https://cdn.hobbyconsolas.com/sites/navi.axelspringer.es/public/media/image/2016/12/pulp-fiction.jpg' WHERE (`id` = '1');
 UPDATE `netflix`.`movies` SET `image` = 'https://upload.wikimedia.org/wikipedia/en/7/7c/Vitaebella.jpg' WHERE (`id` = '2');
 UPDATE `netflix`.`movies` SET `image` = 'https://c8.alamy.com/compes/pxnb1j/forrest-gump-poster-de-pelicula-original-pxnb1j.jpg' WHERE (`id` = '3');
+
+ALTER TABLE `netflix`.`users` 
+CHANGE COLUMN `user` `user` VARCHAR(45) NULL ;
+
+ALTER TABLE `netflix`.`users` 
+CHANGE COLUMN `name` `name` VARCHAR(45) NULL ,
+CHANGE COLUMN `plan_details` `plan_details` VARCHAR(45) NULL ;
