@@ -18,7 +18,8 @@ async function getConnection() {
   const connection = await mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'LieT0M3*',
+    // password: 'LieT0M3*',
+    password:'dev23.',
     database: 'netflix',
   });
   connection.connect();
@@ -57,20 +58,31 @@ server.get('/movie/:movieId', async (req, res) => {
 // signup
 
 server.post('/sign-up', async (req, res) => {
-  
-  const sql = 'INSERT INTO users (email, password) VALUES (?,?)';
-  try {
   const connect = await getConnection();
+  const comprobacion = 'select*from users where email=req.body.email'
+
+  if (comprobacion.length < 1) {
+  const sql = 'INSERT INTO users (email, password) VALUES (?,?)';
   const [results] = await connect.query(sql, [req.body.email, req.body.password]);
-  if(res.ok) {
-  res.json({success: true, message: 'Usuario creado correctamente'});
+  res.json({success: true, userId: results.insertId});
   } else {
-    res.json({success: false, errorMessage: 'Usuario ya existente'});
+    res.json({ success: false, errorMessage: 'el email ya se encuentra en la BBDD' });
   }
-  }
-  catch (err) {
-    console.log(err);
-  }
+  // try{
+  // const sql = 'INSERT INTO users (email, password) VALUES (?,?)';
+
+  // const connect = await getConnection();
+  // const [results] = await connect.query(sql, [req.body.email, req.body.password]);
+  // res.json({success: true, userId: results.insertId});
+  // } catch (err){
+
+  //   res.json({success: false, errorMessage: err.message});
+  // }
+ 
+  // if(results.insertId) {
+  // } else {
+  // }
+  
 });
 
 // static
