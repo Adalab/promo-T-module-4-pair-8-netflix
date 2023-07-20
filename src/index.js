@@ -18,16 +18,19 @@ async function getConnection() {
   const connection = await mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    // password: 'LieT0M3*',
-    password:'dev23.',
+    password: 'LieT0M3*',
+    //password:'dev23.',
     database: 'netflix',
   });
   connection.connect();
   return connection;
 }
 
+const SIZE_PAGE = 5;
+
 // endpoints
 server.get('/movies', async (req, res) => {
+  const page = req.query.page || 0;
   const genreFilterParam = req.query.genre;
   const sortFilterParam = req.query.sort;
   if (genreFilterParam && genreFilterParam !== '') {
@@ -37,11 +40,24 @@ server.get('/movies', async (req, res) => {
     conn.end();
     res.json({ success: true, movies: results });
   } else {
-    const selectMovies = `SELECT * FROM movies ORDER BY title ${sortFilterParam}`;
     const conn = await getConnection();
-    const [results, cols] = await conn.query(selectMovies);
+    const allMovies = `SELECT COUNT(*) FROM movies`;
+    const [allResults] = await conn.query(allMovies);
+    const numResults = allResults[0];
+    const numPages = Math.ceil(numResults / SIZE_PAGE);
+    const selectMovies = `SELECT * FROM movies ORDER BY title ${sortFilterParam} LIMIT ? OFFSET ?`;
+    const [results, cols] = await conn.query(selectMovies, [SIZE_PAGE, page * SIZE_PAGE]);
     conn.end();
-    res.json({ success: true, movies: results });
+    res.json({
+      success: true,
+      info: {
+        page: page,
+        num: numResults,
+        next: page === numPages - 1 ? null : `http://localhost:4000/movies?page=${page + 1}`,
+        prev: page === 0 ? null : `http://localhost:4000/movies?page=${page - 1}`,
+      },
+      movies: results,
+    });
   }
 });
 
@@ -59,12 +75,12 @@ server.get('/movie/:movieId', async (req, res) => {
 
 server.post('/sign-up', async (req, res) => {
   const connect = await getConnection();
-  const comprobacion = 'select*from users where email=req.body.email'
+  const comprobacion = 'select*from users where email=req.body.email';
 
   if (comprobacion.length < 1) {
-  const sql = 'INSERT INTO users (email, password) VALUES (?,?)';
-  const [results] = await connect.query(sql, [req.body.email, req.body.password]);
-  res.json({success: true, userId: results.insertId});
+    const sql = 'INSERT INTO users (email, password) VALUES (?,?)';
+    const [results] = await connect.query(sql, [req.body.email, req.body.password]);
+    res.json({ success: true, userId: results.insertId });
   } else {
     res.json({ success: false, errorMessage: 'el email ya se encuentra en la BBDD' });
   }
@@ -78,11 +94,10 @@ server.post('/sign-up', async (req, res) => {
 
   //   res.json({success: false, errorMessage: err.message});
   // }
- 
+
   // if(results.insertId) {
   // } else {
   // }
-  
 });
 
 // static
