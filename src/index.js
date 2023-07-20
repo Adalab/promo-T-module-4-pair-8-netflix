@@ -26,27 +26,27 @@ async function getConnection() {
   return connection;
 }
 
-const SIZE_PAGE = 5;
+const SIZE_PAGE = 2;
 
 // endpoints
 server.get('/movies', async (req, res) => {
-  const page = req.query.page || 0;
+  const page = parseInt(req.query.page) || 0;
   const genreFilterParam = req.query.genre;
   const sortFilterParam = req.query.sort;
   if (genreFilterParam && genreFilterParam !== '') {
-    const selectMovies = `SELECT * FROM movies WHERE genre=? ORDER BY title ${sortFilterParam}`;
+    const selectMovies = `SELECT * FROM movies WHERE genre=? ORDER BY title ${sortFilterParam === 'desc' ? 'desc' : 'asc'}`;
     const conn = await getConnection();
-    const [results, cols] = await conn.query(selectMovies, [genreFilterParam]);
+    const [results] = await conn.query(selectMovies, [genreFilterParam]);
     conn.end();
     res.json({ success: true, movies: results });
   } else {
     const conn = await getConnection();
     const allMovies = `SELECT COUNT(*) FROM movies`;
     const [allResults] = await conn.query(allMovies);
-    const numResults = allResults[0];
+    const numResults = parseInt(allResults[0]);
     const numPages = Math.ceil(numResults / SIZE_PAGE);
-    const selectMovies = `SELECT * FROM movies ORDER BY title ${sortFilterParam} LIMIT ? OFFSET ?`;
-    const [results, cols] = await conn.query(selectMovies, [SIZE_PAGE, page * SIZE_PAGE]);
+    const selectMovies = `SELECT * FROM movies ORDER BY title ${sortFilterParam === 'desc' ? 'desc' : 'asc'} LIMIT ? OFFSET ?`;
+    const [results] = await conn.query(selectMovies, [SIZE_PAGE, page * SIZE_PAGE]);
     conn.end();
     res.json({
       success: true,
